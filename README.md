@@ -24,7 +24,7 @@ Existing extensions have had issues with tracking, affiliate injection, and sket
 
 ### Chrome Web Store (Recommended)
 
-[Install from Chrome Web Store](#)
+[Install from Chrome Web Store](#) COMING SOON!!! 
 
 ### Manual Install
 
