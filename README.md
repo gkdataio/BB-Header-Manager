@@ -1,5 +1,7 @@
 # BB Header Manager
 
+![BB Header Manager](screenshot.png)
+
 A simple, open-source Chrome extension for bug bounty hunters to inject custom headers into HTTP requests.
 
 ## Why?
