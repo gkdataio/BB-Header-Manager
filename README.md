@@ -1,6 +1,6 @@
 # BB Header Manager
 
-Version 2 UI!!
+
 ![BB Header Manager V2](screenshot2.png)
 
 ![BB Header Manager](screenshot.png)
