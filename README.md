@@ -60,7 +60,7 @@ Existing extensions have had issues with tracking, affiliate injection, and sket
 
 1. Click the extension icon in your toolbar
 2. Create a profile for your target program
-3. Add target domains (e.g., `*.statefarm.com`)
+3. Add target domains (e.g., `*.example.com`)
 4. Add your headers
 5. Toggle ON
 
