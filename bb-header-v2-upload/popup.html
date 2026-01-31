@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 420px;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 13px;
+      background: #0f0f0f;
+      color: #e5e5e5;
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .title-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo {
+      width: 28px;
+      height: 28px;
+      background: #3b82f6;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    h1 { font-size: 15px; font-weight: 600; }
+    
+    /* Toggle */
+    .toggle {
+      position: relative;
+      width: 48px;
+      height: 26px;
+    }
+    .toggle input { display: none; }
+    .toggle label {
+      position: absolute;
+      cursor: pointer;
+      background: #333;
+      border-radius: 13px;
+      width: 100%;
+      height: 100%;
+      transition: background 0.2s;
+    }
+    .toggle label::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      top: 3px;
+      left: 3px;
+      transition: transform 0.2s;
+    }
+    .toggle input:checked + label { background: #22c55e; }
+    .toggle input:checked + label::after { transform: translateX(22px); }
+    
+    /* Status bar */
+    .status {
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #666;
+    }
+    .status-dot.active { background: #22c55e; }
+    .request-count {
+      color: #3b82f6;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    .request-count:hover { text-decoration: underline; }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #252525;
+      padding-bottom: 8px;
+    }
+    .tab {
+      background: none;
+      border: none;
+      color: #666;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .tab:hover { color: #e5e5e5; background: #1a1a1a; }
+    .tab.active { color: #e5e5e5; background: #252525; }
+    
+    /* Tab content */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* Section titles */
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Profile selector */
+    .profile-section {
+      margin-bottom: 12px;
+    }
+    .profile-row {
+      display: flex;
+      gap: 8px;
+    }
+    .profile-select {
+      flex: 1;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: #e5e5e5;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .profile-btn {
+      background: #252525;
+      border: 1px solid #333;
+      color: #888;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .profile-btn:hover { border-color: #3b82f6; color: #e5e5e5; }
+    .profile-btn.danger:hover { border-color: #ef4444; }
+    
+    /* Lists */
+    .list {
+      max-height: 140px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+    }
+    .list-item {
+      display: flex;
+      align-items: center;
+      background: #1a1a1a;
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      border: 1px solid #252525;
+    }
+    .list-item-info {
+      flex: 1;
+      overflow: hidden;
+      min-width: 0;
+    }
+    .list-item-name {
+      font-weight: 500;
+      color: #60a5fa;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 12px;
+    }
+    .list-item-value {
+      color: #666;
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: monospace;
+    }
+    .list-item-toggle {
+      margin-right: 8px;
+    }
+    .list-item-toggle input { display: none; }
+    .list-item-toggle label {
+      display: block;
+      width: 32px;
+      height: 18px;
+      background: #333;
+      border-radius: 9px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .list-item-toggle label::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: white;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s;
+    }
+    .list-item-toggle input:checked + label { background: #22c55e; }
+    .list-item-toggle input:checked + label::after { transform: translateX(14px); }
+    
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      padding: 4px 6px;
+      font-size: 16px;
+      opacity: 0.6;
+    }
+    .delete-btn:hover { opacity: 1; }
+    
+    /* Add forms */
+    .add-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .add-row input {
+      flex: 1;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 8px 10px;
+      color: #e5e5e5;
+      font-size: 12px;
+    }
+    .add-row input:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+    .add-row input::placeholder { color: #555; }
+    .add-row button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .add-row button:hover { background: #2563eb; }
+    
+    /* Presets */
+    .presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+    .preset-btn {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #888;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 10px;
+    }
+    .preset-btn:hover {
+      border-color: #3b82f6;
+      color: #e5e5e5;
+    }
+    
+    /* Methods */
+    .methods {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .method-btn {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #666;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+      transition: all 0.2s;
+    }
+    .method-btn.active {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: white;
+    }
+    .method-btn:hover:not(.active) {
+      border-color: #3b82f6;
+      color: #e5e5e5;
+    }
+    
+    /* Timer */
+    .timer-section {
+      background: #1a1a1a;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #252525;
+    }
+    .timer-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .timer-row select {
+      flex: 1;
+      background: #0f0f0f;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 6px 8px;
+      color: #e5e5e5;
+      font-size: 12px;
+    }
+    .timer-status {
+      font-size: 11px;
+      color: #888;
+      margin-top: 6px;
+    }
+    .timer-status.active { color: #f59e0b; }
+    
+    /* Import/Export */
+    .io-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .io-btn {
+      flex: 1;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #888;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      text-align: center;
+    }
+    .io-btn:hover {
+      border-color: #3b82f6;
+      color: #e5e5e5;
+    }
+    
+    /* Empty state */
+    .empty {
+      text-align: center;
+      color: #555;
+      padding: 16px;
+      font-size: 12px;
+    }
+    
+    /* Footer */
+    .footer {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #252525;
+      text-align: center;
+      font-size: 10px;
+      color: #444;
+    }
+    
+    /* Hidden file input */
+    #importFile { display: none; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="title-section">
+      <div class="logo">H</div>
+      <h1>BB Header Manager</h1>
+    </div>
+    <div class="toggle">
+      <input type="checkbox" id="enabled">
+      <label for="enabled"></label>
+    </div>
+  </div>
+  
+  <div class="status">
+    <div class="status-left">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Disabled</span>
+    </div>
+    <span class="request-count" id="requestCount" title="Click to reset">0 requests</span>
+  </div>
+  
+  <div class="profile-section">
+    <div class="section-title">Profile</div>
+    <div class="profile-row">
+      <select class="profile-select" id="profileSelect"></select>
+      <button class="profile-btn" id="newProfileBtn">+ New</button>
+      <button class="profile-btn danger" id="deleteProfileBtn">Del</button>
+    </div>
+  </div>
+  
+  <div class="tabs">
+    <button class="tab active" data-tab="headers">Headers</button>
+    <button class="tab" data-tab="targets">Targets</button>
+    <button class="tab" data-tab="settings">Settings</button>
+  </div>
+  
+  <!-- Headers Tab -->
+  <div class="tab-content active" id="tab-headers">
+    <div class="presets">
+      <button class="preset-btn" data-name="X-Bug-Bounty">X-Bug-Bounty</button>
+      <button class="preset-btn" data-name="X-HackerOne">X-HackerOne</button>
+      <button class="preset-btn" data-name="X-Bugcrowd">X-Bugcrowd</button>
+      <button class="preset-btn" data-name="X-Security-Research">X-Security</button>
+    </div>
+    
+    <div class="list" id="headersList"></div>
+    
+    <div class="add-row">
+      <input type="text" id="headerName" placeholder="Header name">
+      <input type="text" id="headerValue" placeholder="Value">
+      <button id="addHeaderBtn">Add</button>
+    </div>
+  </div>
+  
+  <!-- Targets Tab -->
+  <div class="tab-content" id="tab-targets">
+    <div class="section-title">Target Domains (wildcards supported)</div>
+    <div class="list" id="targetsList"></div>
+    <div class="add-row">
+      <input type="text" id="targetDomain" placeholder="*.example.com">
+      <button id="addTargetBtn">Add</button>
+    </div>
+    
+    <div class="section-title" style="margin-top: 12px;">Exclude Domains</div>
+    <div class="list" id="excludesList"></div>
+    <div class="add-row">
+      <input type="text" id="excludeDomain" placeholder="google.com">
+      <button id="addExcludeBtn">Add</button>
+    </div>
+  </div>
+  
+  <!-- Settings Tab -->
+  <div class="tab-content" id="tab-settings">
+    <div class="section-title">Request Methods (empty = all)</div>
+    <div class="methods" id="methodsFilter">
+      <button class="method-btn" data-method="GET">GET</button>
+      <button class="method-btn" data-method="POST">POST</button>
+      <button class="method-btn" data-method="PUT">PUT</button>
+      <button class="method-btn" data-method="DELETE">DELETE</button>
+      <button class="method-btn" data-method="PATCH">PATCH</button>
+      <button class="method-btn" data-method="HEAD">HEAD</button>
+      <button class="method-btn" data-method="OPTIONS">OPTIONS</button>
+    </div>
+    
+    <div class="section-title">Auto-Disable Timer</div>
+    <div class="timer-section">
+      <div class="timer-row">
+        <select id="timerSelect">
+          <option value="0">Disabled</option>
+          <option value="30">30 minutes</option>
+          <option value="60">1 hour</option>
+          <option value="120">2 hours</option>
+          <option value="240">4 hours</option>
+          <option value="480">8 hours</option>
+        </select>
+        <button class="profile-btn" id="setTimerBtn">Set</button>
+      </div>
+      <div class="timer-status" id="timerStatus">No timer active</div>
+    </div>
+    
+    <div class="section-title">Import / Export</div>
+    <div class="io-buttons">
+      <button class="io-btn" id="exportBtn">Export Config</button>
+      <button class="io-btn" id="importBtn">Import Config</button>
+    </div>
+    <input type="file" id="importFile" accept=".json">
+  </div>
+  
+  <div class="footer">
+    Open source &bull; No tracking &bull; v2.0
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
